@@ -11,16 +11,20 @@ public class ClassBot extends OpMode {
 
     @Override
     public void init() {
-        bench.move();
+        bench.math();
     }
 
     @Override
     public void loop() {
-        ElapsedTime time = new ElapsedTime();
+        ElapsedTime ElapsedTime = new ElapsedTime();
 
-        telemetry.addData("Elapsed Time", time);
+        bench.move();
+        telemetry.addData("Elapsed Time", ElapsedTime);
         telemetry.addData("Left Motor", bench.leftMotorPower);
         telemetry.addData("Right Motor", bench.rightMotorPower);
-        telemetry.addData("", bench.);
+        telemetry.addData("Target Distance", bench.targetDistance);
+//        telemetry.addData("Current Distance", bench.);
+        telemetry.addData("Target Ticks", bench.targetTicks);
+//        telemetry.addData("Current Ticks", bench.ticks);
     }
 }

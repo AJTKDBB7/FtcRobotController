@@ -10,7 +10,7 @@ public class ClassBench {
     public static double leftMotorPower, rightMotorPower, targetDistance = 123, leftDistance, leftTargetDistance, rightDistance, rightTargetDistance;
     public static double ticks, targetTicks, wheelDiameter = 9, width = 30, power = 0.6, ticksPerRotation, wheelCircumference, motorRatio, gears = 1.6, cmPerTick;
     public static String moveType = "straight";
-    private static DcMotor leftMotor, rightMotor, armMotor;
+    public static DcMotor leftMotor, rightMotor, armMotor;
 
     public void init(HardwareMap hwMap) {
         leftMotor = hwMap.get(DcMotor.class, "left_motor");
@@ -24,34 +24,37 @@ public class ClassBench {
         leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    public static void math(); {
+    public static void math() {
         wheelCircumference = Math.PI * 9;
         ticksPerRotation = 28 * 5 * 4 * 1.6;
         cmPerTick = ticksPerRotation / wheelCircumference;
     }
 
     public static void move() {
-        switch (moveType) {
-            case "straight":
-                leftMotorPower = power;
-                rightMotorPower = power;
-                break;
-            case "spin left":
-                leftMotorPower = -power;
-                rightMotorPower = power;
-                break;
-            case "spin right":
-                leftMotorPower = power;
-                rightMotorPower = -power;
-                break;
-            case "pivot left":
-                leftMotorPower = 0;
-                rightMotorPower = power;
-                break;
-            case "pivot right":
-                leftMotorPower = power;
-                rightMotorPower = 0;
-                break;
+        while (leftDistance < leftTargetDistance || rightDistance < rightTargetDistance) {
+            switch (moveType) {
+                case "straight":
+                    leftMotorPower = power;
+                    rightMotorPower = power;
+                    leftTargetDistance = targetDistance;
+                    rightTargetDistance = targetDistance;
+                    break;
+//            case "spin left":
+//                leftMotorPower = -power;
+//                rightMotorPower = power;
+//                break;
+//            case "spin right":
+//                leftMotorPower = power;
+//                rightMotorPower = -power;
+//                break;
+//            case "pivot left":
+//                leftMotorPower = 0;
+//                rightMotorPower = power;
+//                break;
+//            case "pivot right":
+//                leftMotorPower = power;
+//                rightMotorPower = 0;
+//                break;
 //            case "smooth left":
 //                leftMotorPower = 0.6;
 //                rightMotorPower = 0;
@@ -60,13 +63,19 @@ public class ClassBench {
 //                leftMotorPower = 0.6;
 //                rightMotorPower = 0;
 //                break;
+            }
+
         }
+
+        leftMotor.setPower(leftMotorPower);
+        rightMotor.setPower(rightMotorPower);
+
         while (leftMotorPower != 0 || rightMotorPower != 0) {
             if (leftDistance < leftTargetDistance) {
-                leftMotor.setPower(leftMotorPower);
+                leftMotor.setPower(0);
             }
             if (rightDistance < rightTargetDistance) {
-                rightMotor.setPower(rightMotorPower);
+                rightMotor.setPower(0);
             }
         }
 
