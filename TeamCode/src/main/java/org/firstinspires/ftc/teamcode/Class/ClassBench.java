@@ -1,3 +1,5 @@
+// - Fix gear ratios to be more exact
+// - Finish moveType switch cases
 package org.firstinspires.ftc.teamcode.Class;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -5,7 +7,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class ClassBench {
-
+    public static double leftMotorPower, rightMotorPower, targetDistance = 123, leftDistance, leftTargetDistance, rightDistance, rightTargetDistance;
+    public static double ticks, targetTicks, wheelDiameter = 9, width = 30, power = 0.6, ticksPerRotation, wheelCircumference, motorRatio, gears = 1.6, cmPerTick;
+    public static String moveType = "straight";
     private static DcMotor leftMotor, rightMotor, armMotor;
 
     public void init(HardwareMap hwMap) {
@@ -20,8 +24,51 @@ public class ClassBench {
         leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
+    public static void math(); {
+        wheelCircumference = Math.PI * 9;
+        ticksPerRotation = 28 * 5 * 4 * 1.6;
+        cmPerTick = ticksPerRotation / wheelCircumference;
+    }
+
     public static void move() {
-        leftMotor.setPower(.6);
-        rightMotor.setPower(.6);
+        switch (moveType) {
+            case "straight":
+                leftMotorPower = power;
+                rightMotorPower = power;
+                break;
+            case "spin left":
+                leftMotorPower = -power;
+                rightMotorPower = power;
+                break;
+            case "spin right":
+                leftMotorPower = power;
+                rightMotorPower = -power;
+                break;
+            case "pivot left":
+                leftMotorPower = 0;
+                rightMotorPower = power;
+                break;
+            case "pivot right":
+                leftMotorPower = power;
+                rightMotorPower = 0;
+                break;
+//            case "smooth left":
+//                leftMotorPower = 0.6;
+//                rightMotorPower = 0;
+//                break;
+//            case "smooth right":
+//                leftMotorPower = 0.6;
+//                rightMotorPower = 0;
+//                break;
+        }
+        while (leftMotorPower != 0 || rightMotorPower != 0) {
+            if (leftDistance < leftTargetDistance) {
+                leftMotor.setPower(leftMotorPower);
+            }
+            if (rightDistance < rightTargetDistance) {
+                rightMotor.setPower(rightMotorPower);
+            }
+        }
+
     }
 }
