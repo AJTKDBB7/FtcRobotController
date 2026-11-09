@@ -8,7 +8,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class ClassBench {
     public static double leftMotorPower, rightMotorPower, targetDistance = 123, leftDistance, leftTargetDistance, rightDistance, rightTargetDistance;
-    public static double ticks, targetTicks, wheelDiameter = 9, width = 30, power = 0.6, ticksPerRotation, wheelCircumference, motorRatio, gears = 1.6, cmPerTick;
+    public static double leftTicks, rightTicks, targetTicks, wheelDiameter = 9, width = 30, power = 0.6, ticksPerRotation, wheelCircumference;
+    public static double motorRatio, gears = 1.6, cmPerTick;
     public static String moveType = "straight";
     public static DcMotor leftMotor, rightMotor, armMotor;
 
@@ -28,6 +29,12 @@ public class ClassBench {
         wheelCircumference = Math.PI * 9;
         ticksPerRotation = 28 * 5 * 4 * 1.6;
         cmPerTick = ticksPerRotation / wheelCircumference;
+
+        leftDistance = leftMotor.getCurrentPosition() * cmPerTick;
+        rightDistance = rightMotor.getCurrentPosition() * cmPerTick;
+
+        leftTicks = leftMotor.getCurrentPosition();
+        rightTicks = rightMotor.getCurrentPosition();
     }
 
     public static void move() {
