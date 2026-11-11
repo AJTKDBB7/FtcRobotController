@@ -1,4 +1,3 @@
-// - Fix gear ratios to be more exact
 // - Finish moveType switch cases
 package org.firstinspires.ftc.teamcode.Class;
 
@@ -9,7 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class ClassBench {
     public static double leftMotorPower, rightMotorPower, targetDistance = 123, leftDistance, leftTargetDistance, rightDistance, rightTargetDistance;
     public static double leftTicks, rightTicks, targetTicks, wheelDiameter = 9, width = 30, power = 0.6, ticksPerRotation, wheelCircumference;
-    public static double motorRatio = 28, gears = 1.6, cmPerTick;
+    public static double motorRatio = 28, gears = 1.6, cmPerTick, leftTargetTicks, rightTargetTicks;
     public static String moveType = "straight";
     public static DcMotor leftMotor, rightMotor, armMotor;
 
@@ -27,8 +26,9 @@ public class ClassBench {
 
     public static void math() {
         wheelCircumference = Math.PI * wheelDiameter;
-        ticksPerRotation = motorRatio * 5 * 4 * gears;
+        ticksPerRotation = motorRatio * 5.33 * 3.61 * gears;
         cmPerTick = ticksPerRotation / wheelCircumference;
+        targetTicks = targetDistance * cmPerTick;
 
         leftDistance = leftMotor.getCurrentPosition() * cmPerTick;
         rightDistance = rightMotor.getCurrentPosition() * cmPerTick;
@@ -43,8 +43,8 @@ public class ClassBench {
                 case "straight":
                     leftMotorPower = power;
                     rightMotorPower = power;
-                    leftTargetDistance = targetDistance;
-                    rightTargetDistance = targetDistance;
+                    leftTargetTicks = targetTicks;
+                    rightTargetTicks = targetTicks;
                     break;
 //            case "spin left":
 //                leftMotorPower = -power;
@@ -77,11 +77,14 @@ public class ClassBench {
         leftMotor.setPower(leftMotorPower);
         rightMotor.setPower(rightMotorPower);
 
+        leftMotor.setPower(1);
+        rightMotor.setPower(1);
+
         while (leftMotorPower != 0 || rightMotorPower != 0) {
-            if (leftDistance < leftTargetDistance) {
+            if (leftTicks < leftTargetTicks) {
                 leftMotor.setPower(0);
             }
-            if (rightDistance < rightTargetDistance) {
+            if (rightTicks < rightTargetTicks) {
                 rightMotor.setPower(0);
             }
         }
