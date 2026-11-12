@@ -18,8 +18,9 @@ public class ClassBot extends OpMode {
 
     @Override
     public void loop() {
-        bench.math();
-        bench.move();
+
+        bench.straight(bench, 123);
+
         telemetry.addData("Elapsed Time", totalTime.time());
         telemetry.addData("Left Motor", bench.leftMotorPower);
         telemetry.addData("Right Motor", bench.rightMotorPower);

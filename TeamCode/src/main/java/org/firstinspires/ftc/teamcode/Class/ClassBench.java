@@ -1,4 +1,3 @@
-// - Finish moveType switch cases
 package org.firstinspires.ftc.teamcode.Class;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -6,16 +5,19 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class ClassBench {
-    public static double leftMotorPower, rightMotorPower, targetDistance = 123, leftDistance, leftTargetDistance, rightDistance, rightTargetDistance;
+    public static double leftMotorPower, rightMotorPower, targetDistance, leftDistance, leftTargetDistance, rightDistance, rightTargetDistance;
     public static double leftTicks, rightTicks, targetTicks, wheelDiameter = 9, width = 30, power = 0.6, ticksPerRotation, wheelCircumference;
     public static double motorRatio = 28, gears = 1.6, cmPerTick, leftTargetTicks, rightTargetTicks;
-    public static String moveType = "straight";
     public static DcMotor leftMotor, rightMotor, armMotor;
 
     public void init(HardwareMap hwMap) {
         leftMotor = hwMap.get(DcMotor.class, "left_motor");
         rightMotor = hwMap.get(DcMotor.class, "right_motor");
         armMotor = hwMap.get(DcMotor.class, "arm_motor");
+
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -24,7 +26,7 @@ public class ClassBench {
         leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    public static void math() {
+    public void math() {
         wheelCircumference = Math.PI * wheelDiameter;
         ticksPerRotation = motorRatio * 5.33 * 3.61 * gears;
         cmPerTick = ticksPerRotation / wheelCircumference;
@@ -37,57 +39,34 @@ public class ClassBench {
         rightTicks = rightMotor.getCurrentPosition();
     }
 
-    public static void move() {
-        while (leftDistance < leftTargetDistance || rightDistance < rightTargetDistance) {
-            switch (moveType) {
-                case "straight":
-                    leftMotorPower = power;
-                    rightMotorPower = power;
-                    leftTargetTicks = targetTicks;
-                    rightTargetTicks = targetTicks;
-                    break;
-//            case "spin left":
-//                leftMotorPower = -power;
-//                rightMotorPower = power;
-//                break;
-//            case "spin right":
-//                leftMotorPower = power;
-//                rightMotorPower = -power;
-//                break;
-//            case "pivot left":
-//                leftMotorPower = 0;
-//                rightMotorPower = power;
-//                break;
-//            case "pivot right":
-//                leftMotorPower = power;
-//                rightMotorPower = 0;
-//                break;
-//            case "smooth left":
-//                leftMotorPower = 0.6;
-//                rightMotorPower = 0;
-//                break;
-//            case "smooth right":
-//                leftMotorPower = 0.6;
-//                rightMotorPower = 0;
-//                break;
-            }
+    public void straight(ClassBench bench, int distance) {
 
-        }
+        targetDistance = distance;
+        bench.math();
 
-        leftMotor.setPower(leftMotorPower);
-        rightMotor.setPower(rightMotorPower);
+//        leftMotor.setPower(leftMotorPower);
+//        rightMotor.setPower(rightMotorPower);
 
-        leftMotor.setPower(1);
-        rightMotor.setPower(1);
+        int LTT = (int) Math.round(leftTargetTicks);
+        int RTT = (int) Math.round(rightTargetTicks);
 
-        while (leftMotorPower != 0 || rightMotorPower != 0) {
-            if (leftTicks < leftTargetTicks) {
-                leftMotor.setPower(0);
-            }
-            if (rightTicks < rightTargetTicks) {
-                rightMotor.setPower(0);
-            }
-        }
+        leftMotor.setTargetPosition(LTT);
+        rightMotor.setTargetPosition(RTT);
+
+        leftMotor.setPower(.6);
+        rightMotor.setPower(.6);
+
+//        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+//        while (leftMotorPower != 0 || rightMotorPower != 0) {
+//            if (leftTicks >= leftTargetTicks) {
+//                leftMotor.setPower(0);
+//            }
+//            if (rightTicks >= rightTargetTicks) {
+//                rightMotor.setPower(0);
+//            }
+//        }
 
     }
 }
