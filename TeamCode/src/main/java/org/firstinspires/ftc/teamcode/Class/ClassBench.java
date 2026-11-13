@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class ClassBench {
     public static double leftMotorPower, rightMotorPower, targetDistance, leftDistance, leftTargetDistance, rightDistance, rightTargetDistance;
     public static double leftTicks, rightTicks, targetTicks, wheelDiameter = 9, width = 30, power = 0.6, ticksPerRotation, wheelCircumference;
-    public static double motorRatio = 28, gears = 1.6, cmPerTick, leftTargetTicks, rightTargetTicks;
+    public static double motorRatio = 28, gears = 1.6, cmPerTick, leftTargetTicks, rightTargetTicks, degree;
     public static DcMotor leftMotor, rightMotor, armMotor;
 
     public void init(HardwareMap hwMap) {
@@ -57,5 +57,14 @@ public class ClassBench {
 
         leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public void spin(ClassBench bench, int degrees) {
+
+        degree = degrees;
+        bench.math();
+
+
+
     }
 }
