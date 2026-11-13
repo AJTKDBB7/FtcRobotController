@@ -30,5 +30,8 @@ public class ClassBot extends OpMode {
         telemetry.addData("Target Ticks", bench.targetTicks);
         telemetry.addData("Left Ticks", bench.leftTicks);
         telemetry.addData("Right Ticks", bench.rightTicks);
+
+        telemetry.addData("Left Target Ticks", bench.leftTargetTicks);
+        telemetry.addData("Right Target Ticks", bench.rightTargetTicks);
     }
 }

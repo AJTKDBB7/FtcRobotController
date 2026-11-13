@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Class;
 
+import static java.lang.Math.round;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -44,29 +46,16 @@ public class ClassBench {
         targetDistance = distance;
         bench.math();
 
-//        leftMotor.setPower(leftMotorPower);
-//        rightMotor.setPower(rightMotorPower);
+        leftTargetTicks = targetTicks;
+        rightTargetTicks = targetTicks;
 
-        int LTT = (int) Math.round(leftTargetTicks);
-        int RTT = (int) Math.round(rightTargetTicks);
+        leftMotor.setTargetPosition((int)leftTargetTicks);
+        rightMotor.setTargetPosition((int)rightTargetTicks);
 
-        leftMotor.setTargetPosition(LTT);
-        rightMotor.setTargetPosition(RTT);
+        leftMotor.setPower(power);
+        rightMotor.setPower(power);
 
-        leftMotor.setPower(.6);
-        rightMotor.setPower(.6);
-
-//        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-//        while (leftMotorPower != 0 || rightMotorPower != 0) {
-//            if (leftTicks >= leftTargetTicks) {
-//                leftMotor.setPower(0);
-//            }
-//            if (rightTicks >= rightTargetTicks) {
-//                rightMotor.setPower(0);
-//            }
-//        }
-
+        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 }
