@@ -19,11 +19,11 @@ public class ClassBot extends OpMode {
     @Override
     public void loop() {
 
-        bench.straight(bench, 123);
+        bench.spin(bench, 123, "left");
 
         telemetry.addData("Elapsed Time", totalTime.time());
-        telemetry.addData("Left Motor", bench.leftMotorPower);
-        telemetry.addData("Right Motor", bench.rightMotorPower);
+        telemetry.addData("Left Power", bench.leftMotorPower);
+        telemetry.addData("Right Power", bench.rightMotorPower);
         telemetry.addData("Target Distance", bench.targetDistance);
         telemetry.addData("Left Distance", bench.leftDistance);
         telemetry.addData("Right Distance", bench.rightDistance);
