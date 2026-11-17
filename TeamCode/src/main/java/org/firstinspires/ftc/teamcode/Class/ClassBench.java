@@ -117,11 +117,6 @@ public class ClassBench {
 
         leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        while (!(leftTicks == leftTargetTicks) || !(rightTicks == rightTargetTicks)) {
-            done = false;
-        }
-        done = true;
     }
 
     public void resetMotors() {

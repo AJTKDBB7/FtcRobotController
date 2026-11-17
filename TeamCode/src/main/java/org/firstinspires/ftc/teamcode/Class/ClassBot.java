@@ -18,13 +18,20 @@ public class ClassBot extends OpMode {
 
     public void start() {
         bench.straight(bench, 123);
+        halt();
         bench.spin(bench, 180, "left");
+        halt();
         bench.straight(bench, 123);
+        halt();
         bench.pivot(bench, 180, "right");
     }
 
     @Override
     public void loop() {
+        telemetry();
+    }
+
+    public void telemetry () {
         telemetry.addData("Elapsed Time", totalTime.time());
         telemetry.addData("Left Power", bench.leftMotorPower);
         telemetry.addData("Right Power", bench.rightMotorPower);
@@ -37,5 +44,12 @@ public class ClassBot extends OpMode {
 
         telemetry.addData("Left Target Ticks", bench.leftTargetTicks);
         telemetry.addData("Right Target Ticks", bench.rightTargetTicks);
+    }
+
+    public void halt() {
+        while (!(bench.leftTicks == bench.leftTargetTicks) || !(bench.rightTicks == bench.rightTargetTicks)) {
+            bench.done = false;
+        }
+        bench.done = true;
     }
 }
