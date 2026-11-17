@@ -49,14 +49,7 @@ public class ClassBench {
         leftTargetTicks = targetTicks;
         rightTargetTicks = targetTicks;
 
-        leftMotor.setTargetPosition((int)leftTargetTicks);
-        rightMotor.setTargetPosition((int)rightTargetTicks);
-
-        leftMotor.setPower(power);
-        rightMotor.setPower(power);
-
-        leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        startMoving();
     }
 
     public void spin(ClassBench bench, int degrees, String direction) {
@@ -76,6 +69,34 @@ public class ClassBench {
             rightTargetTicks = -rightTargetTicks;
         }
 
+        startMoving();
+    }
+
+    public void pivot(ClassBench bench, int degrees, String direction) {
+
+        degree = degrees;
+        bench.math();
+
+        targetDistance = Math.PI * width / 2;
+
+        if (direction.equals("left")) {
+            leftTargetTicks = targetDistance;;
+        }
+        else if (direction.equals("right")) {
+            rightTargetTicks = targetDistance;
+        }
+
+        startMoving();
+    }
+
+    public void smooth() {
+
+        
+
+        startMoving();
+    }
+
+    public void startMoving() {
         leftMotor.setTargetPosition((int)leftTargetTicks);
         rightMotor.setTargetPosition((int)rightTargetTicks);
 
