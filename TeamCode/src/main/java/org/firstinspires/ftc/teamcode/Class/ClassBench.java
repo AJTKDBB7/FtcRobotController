@@ -9,7 +9,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class ClassBench {
     public static double leftMotorPower, rightMotorPower, targetDistance, leftDistance, leftTargetDistance, rightDistance, rightTargetDistance;
     public static double leftTicks, rightTicks, targetTicks, wheelDiameter = 9, width = 30, power = 0.6, ticksPerRotation, wheelCircumference;
-    public static double motorRatio = 28, gears = 1.6, cmPerTick, leftTargetTicks, rightTargetTicks, degree, internalRatio = 5.33 * 3.61;
+    public static double motorRatio = 28, gears = 1.6, cmPerTick, leftTargetTicks = 0, rightTargetTicks = 0, degree, internalRatio = 5.33 * 3.61;
+    public static boolean done;
     public static DcMotor leftMotor, rightMotor, armMotor;
 
     public void init(HardwareMap hwMap) {
@@ -42,6 +43,8 @@ public class ClassBench {
     }
 
     public void straight(ClassBench bench, int distance) {
+        resetMotors();
+        done = false;
 
         targetDistance = distance;
         bench.math();
@@ -53,14 +56,16 @@ public class ClassBench {
     }
 
     public void spin(ClassBench bench, int degrees, String direction) {
+        resetMotors();
+        done = false;
 
         degree = degrees;
         bench.math();
 
         targetDistance = Math.PI * width / (360/degree);
 
-        leftTargetTicks = targetDistance / cmPerTick;
-        rightTargetTicks = targetDistance / cmPerTick;
+        leftTargetTicks = targetDistance * cmPerTick;
+        rightTargetTicks = targetDistance * cmPerTick;
 
         if (direction.equals("left")) {
             leftTargetTicks = -leftTargetTicks;
@@ -73,25 +78,32 @@ public class ClassBench {
     }
 
     public void pivot(ClassBench bench, int degrees, String direction) {
+        resetMotors();
+        done = false;
 
         degree = degrees;
         bench.math();
 
-        targetDistance = Math.PI * width / 2;
+        targetDistance = Math.PI * width / (360/degree*2);
+
+        targetTicks = targetDistance * cmPerTick;
 
         if (direction.equals("left")) {
-            leftTargetTicks = targetDistance;;
+            leftTargetTicks = targetTicks;
+            rightTargetTicks = 0;
         }
         else if (direction.equals("right")) {
-            rightTargetTicks = targetDistance;
+            leftTargetTicks = 0;
+            rightTargetTicks = targetTicks;
         }
 
         startMoving();
     }
 
     public void smooth() {
+        resetMotors();
 
-        
+
 
         startMoving();
     }
@@ -105,5 +117,15 @@ public class ClassBench {
 
         leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        while (!(leftTicks == leftTargetTicks) || !(rightTicks == rightTargetTicks)) {
+            done = false;
+        }
+        done = true;
+    }
+
+    public void resetMotors() {
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 }

@@ -16,11 +16,15 @@ public class ClassBot extends OpMode {
         bench.init(hardwareMap);
     }
 
+    public void start() {
+        bench.straight(bench, 123);
+        bench.spin(bench, 180, "left");
+        bench.straight(bench, 123);
+        bench.pivot(bench, 180, "right");
+    }
+
     @Override
     public void loop() {
-
-        bench.spin(bench, 123, "left");
-
         telemetry.addData("Elapsed Time", totalTime.time());
         telemetry.addData("Left Power", bench.leftMotorPower);
         telemetry.addData("Right Power", bench.rightMotorPower);
