@@ -17,13 +17,13 @@ public class ClassBot extends OpMode {
     }
 
     public void start() {
-        bench.straight(bench, 123);
-        halt();
-        bench.spin(bench, 180, "left");
-        halt();
-        bench.straight(bench, 123);
-        halt();
-        bench.pivot(bench, 180, "right");
+//        bench.straight(bench, 123);
+//        halt();
+        bench.spin(bench, 360, "left");
+//        halt();
+//        bench.straight(bench, 123);
+//        halt();
+//        bench.pivot(bench, 90, "right");
     }
 
     @Override
@@ -32,6 +32,7 @@ public class ClassBot extends OpMode {
     }
 
     public void telemetry () {
+        bench.math();
         telemetry.addData("Elapsed Time", totalTime.time());
         telemetry.addData("Left Power", bench.leftMotorPower);
         telemetry.addData("Right Power", bench.rightMotorPower);
@@ -44,12 +45,19 @@ public class ClassBot extends OpMode {
 
         telemetry.addData("Left Target Ticks", bench.leftTargetTicks);
         telemetry.addData("Right Target Ticks", bench.rightTargetTicks);
+
+        telemetry.update();
     }
 
     public void halt() {
-        while (!(bench.leftTicks == bench.leftTargetTicks) || !(bench.rightTicks == bench.rightTargetTicks)) {
-            bench.done = false;
+        while (!bench.done) {
+            if (((bench.leftTicks >= bench.leftTargetTicks - 5) && (bench.leftTicks <= bench.leftTargetTicks + 5)) && ((bench.rightTargetTicks - 5 <= bench.rightTicks) && (bench.rightTargetTicks + 5 >= bench.rightTicks))) {
+                telemetry();
+                bench.done = true;
+            }
+            else {
+                telemetry();
+            }
         }
-        bench.done = true;
     }
 }
