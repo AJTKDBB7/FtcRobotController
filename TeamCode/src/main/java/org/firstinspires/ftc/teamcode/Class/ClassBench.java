@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class ClassBench {
     public static double leftMotorPower, rightMotorPower, targetDistance, leftDistance, leftTargetDistance, rightDistance, rightTargetDistance;
-    public static double leftTicks, rightTicks, targetTicks, wheelDiameter = 9, width = 30, power = 0.4, ticksPerRotation, wheelCircumference;
+    public static double leftTicks, rightTicks, targetTicks, wheelDiameter = 9, width = 30, power = 0.2, ticksPerRotation, wheelCircumference;
     public static double motorRatio = 28, gears = 1.6, cmPerTick, leftTargetTicks = 0, rightTargetTicks = 0, degree, internalRatio = 5.33 * 3.61;
     public static boolean done;
     public static DcMotor leftMotor, rightMotor, armMotor;

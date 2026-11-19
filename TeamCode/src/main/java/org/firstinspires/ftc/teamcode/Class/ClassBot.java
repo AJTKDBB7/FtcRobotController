@@ -17,13 +17,13 @@ public class ClassBot extends OpMode {
     }
 
     public void start() {
-//        bench.straight(bench, 123);
-//        halt();
-        bench.spin(bench, 360, "left");
-//        halt();
-//        bench.straight(bench, 123);
-//        halt();
-//        bench.pivot(bench, 90, "right");
+        bench.straight(bench, 123);
+        halt();
+        bench.spin(bench, 180, "left");
+        halt();
+        bench.straight(bench, 123);
+        halt();
+        bench.pivot(bench, 90, "right");
     }
 
     @Override
@@ -51,13 +51,29 @@ public class ClassBot extends OpMode {
 
     public void halt() {
         while (!bench.done) {
+            telemetry();
             if (((bench.leftTicks >= bench.leftTargetTicks - 5) && (bench.leftTicks <= bench.leftTargetTicks + 5)) && ((bench.rightTargetTicks - 5 <= bench.rightTicks) && (bench.rightTargetTicks + 5 >= bench.rightTicks))) {
-                telemetry();
                 bench.done = true;
             }
             else {
-                telemetry();
             }
+
+//            if ((bench.leftTicks > 200 || bench.rightTicks > 200) && ((bench.leftMotorPower < bench.power / 2 && bench.leftMotorPower > bench.power / 6) || (bench.rightMotorPower < bench.power / 2 && bench.rightMotorPower > bench.power / 6))) {
+//
+//                bench.leftMotorPower *= 2;
+//                bench.rightMotorPower *= 2;
+//
+//                bench.leftMotor.setPower(bench.leftMotorPower);
+//                bench.rightMotor.setPower(bench.rightMotorPower);
+//            }
+//            else if ((bench.leftTicks > 600 || bench.rightTicks > 600) && ((bench.leftMotorPower > bench.power / 2 && bench.leftMotorPower < bench.power) || (bench.rightMotorPower > bench.power / 2 && bench.rightMotorPower < bench.power))) {
+//
+//                bench.leftMotorPower *= 1.5;
+//                bench.rightMotorPower *= 1.5;
+//
+//                bench.leftMotor.setPower(bench.leftMotorPower);
+//                bench.rightMotor.setPower(bench.rightMotorPower);
+//            }
         }
     }
 }
