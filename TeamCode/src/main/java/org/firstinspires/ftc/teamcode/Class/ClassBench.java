@@ -10,6 +10,7 @@ public class ClassBench {
     public static double leftMotorPower, rightMotorPower, targetDistance, leftDistance, leftTargetDistance, rightDistance, rightTargetDistance;
     public static double leftTicks, rightTicks, targetTicks, wheelDiameter = 9, width = 30, power = 0.2, ticksPerRotation, wheelCircumference;
     public static double motorRatio = 28, gears = 1.6, cmPerTick, leftTargetTicks = 0, rightTargetTicks = 0, degree, internalRatio = 5.33 * 3.61;
+    public static double targetDistanceAngle, targetTicksAngle;
     public static boolean done;
     public static DcMotor leftMotor, rightMotor, armMotor;
 
@@ -33,8 +34,11 @@ public class ClassBench {
         wheelCircumference = Math.PI * wheelDiameter;
         ticksPerRotation = motorRatio * internalRatio * gears;
         cmPerTick = ticksPerRotation / wheelCircumference;
-        targetTicks = targetDistance * cmPerTick;
 
+        degreeToTicks();
+    }
+
+    public void getPositions() {
         leftDistance = leftMotor.getCurrentPosition() * cmPerTick;
         rightDistance = rightMotor.getCurrentPosition() * cmPerTick;
 
@@ -42,66 +46,40 @@ public class ClassBench {
         rightTicks = rightMotor.getCurrentPosition();
     }
 
-    public void straight(ClassBench bench, int distance) {
-        resetMotors();
-        done = false;
-
-        targetDistance = distance;
-        bench.math();
-
-        leftTargetTicks = targetTicks;
-        rightTargetTicks = targetTicks;
-
-        leftMotorPower = power;
-        rightMotorPower = power;
-
-        startMoving();
-    }
-
-    public void spin(ClassBench bench, int degrees, String direction) {
-        resetMotors();
-        done = false;
-
-        degree = degrees;
-        bench.math();
-
-        targetDistance = Math.PI * width / (360/degree);
-
-        leftTargetTicks = targetDistance * cmPerTick;
-        rightTargetTicks = targetDistance * cmPerTick;
-
-        if (direction.equals("left")) {
-            leftTargetTicks = -leftTargetTicks;
-        }
-        else if (direction.equals("right")) {
-            rightTargetTicks = -rightTargetTicks;
-        }
-
-        leftMotorPower = power;
-        rightMotorPower = power;
-
-        startMoving();
-    }
-
-    public void pivot(ClassBench bench, int degrees, String direction) {
-        resetMotors();
-        done = false;
-
-        degree = degrees;
-        bench.math();
-
-        targetDistance = Math.PI * width / (360/(degree*2));
-
+    public void degreeToTicks() {
+        targetDistanceAngle = Math.PI * width / (360/degree);
+        targetDistance = degree;
         targetTicks = targetDistance * cmPerTick;
+        targetTicksAngle = targetDistanceAngle * cmPerTick;
+    }
 
-        if (direction.equals("left")) {
+    public void move(ClassBench bench, int degrees, String direction) {
+        resetMotors();
+        done = false;
+
+        degree = degrees;
+        bench.math();
+
+        if (direction.equals("straight")) {
             leftTargetTicks = targetTicks;
-            rightTargetTicks = 0;
-        }
-        else if (direction.equals("right")) {
-            leftTargetTicks = 0;
             rightTargetTicks = targetTicks;
         }
+        else if (direction.equals("spinLeft")) {
+            leftTargetTicks = -targetTicksAngle;
+            rightTargetTicks = targetTicksAngle;
+        }
+        else if (direction.equals("spinRight")) {
+            rightTargetTicks = -targetTicksAngle;
+            leftTargetTicks = targetTicksAngle;
+        }
+        else if (direction.equals("pivotLeft")) {
+            leftTargetTicks = targetTicksAngle * 2;
+            rightTargetTicks = 0;
+        }
+        else if (direction.equals("pivotRight")) {
+            leftTargetTicks = 0;
+            rightTargetTicks = targetTicksAngle * 2;
+        }
 
         leftMotorPower = power;
         rightMotorPower = power;
@@ -109,13 +87,13 @@ public class ClassBench {
         startMoving();
     }
 
-    public void smooth() {
-        resetMotors();
-
-
-
-        startMoving();
-    }
+//    public void smooth() {
+//        resetMotors();
+//
+//
+//
+//        startMoving();
+//    }
 
     public void startMoving() {
         leftMotor.setTargetPosition((int)leftTargetTicks);
